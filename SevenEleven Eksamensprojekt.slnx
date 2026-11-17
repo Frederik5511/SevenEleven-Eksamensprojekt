@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="SevenEleven.Core/SevenEleven.Core.csproj" />
+  <Project Path="SevenEleven.WPF/SevenEleven.WPF.csproj" />
+</Solution>

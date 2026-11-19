@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Database/">
+    <File Path="../../../OneDrive/Desktop/CreateDatabase.sql.sql" />
+  </Folder>
   <Project Path="SevenEleven.Core/SevenEleven.Core.csproj" />
   <Project Path="SevenEleven.WPF/SevenEleven.WPF.csproj" />
 </Solution>

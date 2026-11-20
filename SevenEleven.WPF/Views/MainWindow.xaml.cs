@@ -1,8 +1,7 @@
 ﻿
-using System;
 using System.Windows;
-using SevenEleven.Core.Models;
 using SevenEleven.Core.Repositories;
+using SevenEleven.WPF.ViewModels;
 
 namespace SevenEleven.WPF
 {
@@ -21,24 +20,12 @@ namespace SevenEleven.WPF
             InventoryRepository repository =
                 new InventoryRepository(connectionString);
 
-            try
-            {
-                List<InventoryOverview> inventory =
-                    repository.GetInventoryOverview(1);
+            InventoryViewModel viewModel =
+                new InventoryViewModel(repository);
 
-                foreach (InventoryOverview item in inventory)
-                {
-                    System.Diagnostics.Debug.WriteLine(
-                        $"{item.ProductName}: {item.Quantity} stk."
-                    );
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    $"Databasefejl: {ex.Message}"
-                );
-            }
+            DataContext = viewModel;
+
+            viewModel.LoadInventory(1);
         }
     }
 }

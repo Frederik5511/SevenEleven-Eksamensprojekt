@@ -1,0 +1,51 @@
+﻿<UserControl x:Class="SevenEleven.WPF.Views.InventoryView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Grid Margin="20">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Title -->
+        <TextBlock Text="Lageroversigt"
+                   FontSize="24"
+                   FontWeight="Bold"
+                   Margin="0,0,0,20"/>
+
+        <!-- Inventory table -->
+        <DataGrid Grid.Row="1"
+                  ItemsSource="{Binding InventoryItems}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True">
+
+            <DataGrid.Columns>
+
+                <DataGridTextColumn Header="Produkt"
+                                    Binding="{Binding ProductName}"
+                                    Width="*"/>
+
+                <DataGridTextColumn Header="Stregkode"
+                                    Binding="{Binding Barcode}"
+                                    Width="*"/>
+
+                <DataGridTextColumn Header="Antal"
+                                    Binding="{Binding Quantity}"
+                                    Width="100"/>
+
+                <DataGridTextColumn Header="Minimum"
+                                    Binding="{Binding MinimumStock}"
+                                    Width="100"/>
+
+                <DataGridCheckBoxColumn Header="Under minimum"
+                                        Binding="{Binding IsBelowMinimum, Mode=OneWay}"
+                                        Width="120"/>
+
+            </DataGrid.Columns>
+
+        </DataGrid>
+
+    </Grid>
+</UserControl>

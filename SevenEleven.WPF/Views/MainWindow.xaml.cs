@@ -1,24 +1,44 @@
-﻿using System.Text;
+﻿
+using System;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using SevenEleven.Core.Models;
+using SevenEleven.Core.Repositories;
 
 namespace SevenEleven.WPF
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
+
+            string connectionString =
+                "Server=localhost;" +
+                "Database=SevenElevenDB;" +
+                "Trusted_Connection=True;" +
+                "TrustServerCertificate=True;";
+
+            InventoryRepository repository =
+                new InventoryRepository(connectionString);
+
+            try
+            {
+                List<InventoryOverview> inventory =
+                    repository.GetInventoryOverview(1);
+
+                foreach (InventoryOverview item in inventory)
+                {
+                    System.Diagnostics.Debug.WriteLine(
+                        $"{item.ProductName}: {item.Quantity} stk."
+                    );
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Databasefejl: {ex.Message}"
+                );
+            }
         }
     }
 }

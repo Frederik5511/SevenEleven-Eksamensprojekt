@@ -6,6 +6,8 @@ using System.Windows.Data;
 using SevenEleven.Core.Models;
 using SevenEleven.Core.Repositories;
 using Microsoft.Data.SqlClient;
+using System.Windows.Input;
+using SevenEleven.WPF.Commands;
 
 namespace SevenEleven.WPF.ViewModels
 {
@@ -23,7 +25,7 @@ namespace SevenEleven.WPF.ViewModels
         public string EmptyMessage { get; private set; }
             = "Ingen produkter fundet";
 
-
+        public ICommand RefreshCommand { get; }
         public string SearchText
         {
             get => _searchText;
@@ -48,8 +50,11 @@ namespace SevenEleven.WPF.ViewModels
                 CollectionViewSource.GetDefaultView(InventoryItems);
 
             FilteredInventory.Filter = FilterItem;
-        }
 
+            RefreshCommand = new RelayCommand(
+                () => LoadInventory(1)
+            );
+        }
 
         public void LoadInventory(int storeId)
         {

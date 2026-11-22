@@ -1,11 +1,11 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Data;
 using SevenEleven.Core.Models;
 using SevenEleven.Core.Repositories;
+using Microsoft.Data.SqlClient;
 
 namespace SevenEleven.WPF.ViewModels
 {
@@ -14,10 +14,15 @@ namespace SevenEleven.WPF.ViewModels
         private readonly InventoryRepository _repository;
         private string _searchText = "";
 
+        private InventoryOverview? _selectedInventory;
+
         public ObservableCollection<InventoryOverview> InventoryItems
         { get; } = new();
 
         public ICollectionView FilteredInventory { get; }
+        public string EmptyMessage { get; private set; }
+            = "Ingen produkter fundet";
+
 
         public string SearchText
         {
@@ -45,18 +50,37 @@ namespace SevenEleven.WPF.ViewModels
             FilteredInventory.Filter = FilterItem;
         }
 
+
         public void LoadInventory(int storeId)
         {
+            SelectedInventory = null;
             InventoryItems.Clear();
 
-            List<InventoryOverview> items =
-                _repository.GetInventoryOverview(storeId);
+            EmptyMessage = "Ingen produkter fundet";
+            OnPropertyChanged(nameof(EmptyMessage));
 
-            foreach (InventoryOverview item in items)
+            try
             {
-                InventoryItems.Add(item);
+                List<InventoryOverview> items =
+                    _repository.GetInventoryOverview(storeId);
+
+                foreach (InventoryOverview item in items)
+                {
+                    InventoryItems.Add(item);
+                }
+            }
+            catch (SqlException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex);
+
+                EmptyMessage =
+                    "Kunne ikke hente lagerbeholdningen. " +
+                    "Kontrollér forbindelsen til SQL Server.";
+
+                OnPropertyChanged(nameof(EmptyMessage));
             }
         }
+
 
         private bool FilterItem(object obj)
         {
@@ -83,5 +107,19 @@ namespace SevenEleven.WPF.ViewModels
                 this,
                 new PropertyChangedEventArgs(propertyName));
         }
+        public InventoryOverview? SelectedInventory
+        {
+            get => _selectedInventory;
+
+            set
+            {
+                if (_selectedInventory == value)
+                    return;
+
+                _selectedInventory = value;
+                OnPropertyChanged(nameof(SelectedInventory));
+            }
+        }
+
     }
 }

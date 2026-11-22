@@ -8,6 +8,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <!-- Title -->
@@ -27,10 +28,14 @@
                         UpdateSourceTrigger=PropertyChanged}"/>
 
         <!-- Inventory table -->
-        <DataGrid Grid.Row="2"
+        <DataGrid x:Name="InventoryGrid"
+                  Grid.Row="2"
                   ItemsSource="{Binding FilteredInventory}"
+                  SelectedItem="{Binding SelectedInventory, Mode=TwoWay}"
+                  SelectionMode="Single"
                   AutoGenerateColumns="False"
                   IsReadOnly="True">
+           
 
             <DataGrid.Columns>
 
@@ -56,7 +61,80 @@
 
             </DataGrid.Columns>
 
+
         </DataGrid>
+
+
+        <!-- Message when no products are found -->
+        <TextBlock Grid.Row="2"
+           Text="{Binding EmptyMessage}"
+           FontSize="16"
+           Foreground="Gray"
+           HorizontalAlignment="Center"
+           VerticalAlignment="Center"
+           IsHitTestVisible="False">
+
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Setter Property="Visibility"
+                    Value="Collapsed"/>
+
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding HasItems, ElementName=InventoryGrid}"
+                             Value="False">
+                            <Setter Property="Visibility"
+                            Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+
+        </TextBlock>
+
+
+        <!-- Selected product details -->
+        <Border Grid.Row="3"
+        Background="#F2F2F2"
+        Padding="15"
+        Margin="0,15,0,0"
+        CornerRadius="5">
+
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding SelectedInventory}"
+                             Value="{x:Null}">
+                            <Setter Property="Visibility"
+                            Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+
+            <StackPanel>
+                <TextBlock Text="Produktdetaljer"
+                   FontSize="18"
+                   FontWeight="Bold"
+                   Margin="0,0,0,10"/>
+
+                <TextBlock Text="{Binding SelectedInventory.ProductName,
+                         StringFormat='Produkt: {0}'}"/>
+
+                <TextBlock Text="{Binding SelectedInventory.Barcode,
+                         StringFormat='Stregkode: {0}'}"/>
+
+                <TextBlock Text="{Binding SelectedInventory.Quantity,
+                         StringFormat='Lagerantal: {0}'}"/>
+
+                <TextBlock Text="{Binding SelectedInventory.MinimumStock,
+                         StringFormat='Minimum: {0}'}"/>
+
+                <TextBlock Text="{Binding SelectedInventory.LastUpdated,
+                         StringFormat='Senest opdateret: {0:dd-MM-yyyy HH:mm}'}"/>
+            </StackPanel>
+
+        </Border>
+
 
     </Grid>
 </UserControl>

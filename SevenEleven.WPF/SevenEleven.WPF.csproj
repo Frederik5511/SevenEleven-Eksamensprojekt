@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="ViewModels\" />
+    <ProjectReference Include="..\SevenEleven.Core\SevenEleven.Core.csproj" />
   </ItemGroup>
 
 </Project>

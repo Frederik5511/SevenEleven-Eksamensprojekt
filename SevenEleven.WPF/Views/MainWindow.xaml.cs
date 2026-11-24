@@ -1,24 +1,31 @@
-﻿using System.Text;
+﻿
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using SevenEleven.Core.Repositories;
+using SevenEleven.WPF.ViewModels;
 
 namespace SevenEleven.WPF
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
+
+            string connectionString =
+                "Server=localhost;" +
+                "Database=SevenElevenDB;" +
+                "Trusted_Connection=True;" +
+                "TrustServerCertificate=True;";
+
+            InventoryRepository repository =
+                new InventoryRepository(connectionString);
+
+            InventoryViewModel viewModel =
+                new InventoryViewModel(repository);
+
+            DataContext = viewModel;
+
+            viewModel.LoadInventory(1);
         }
     }
 }

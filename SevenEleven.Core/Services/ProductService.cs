@@ -19,31 +19,31 @@ namespace SevenEleven.Core.Services
         {
             if (string.IsNullOrWhiteSpace(name) || name.Length > 100)
             {
-                throw new ArgumentException("Produktnavnet skal være udfyldt og må højst være 100 tegn", nameof(name));
+                throw new ArgumentException("Produktnavnet skal være udfyldt og må højst være 100 tegn");
             }
 
             if (purchasePrice < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(purchasePrice), "Indkøbspris må ikke være negativ");
+                throw new ArgumentOutOfRangeException(null, message: "Indkøbspris må ikke være negativ");
             }
             
             if (sellingPrice < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(sellingPrice), "Salgspris må ikke være negativ");
+                throw new ArgumentOutOfRangeException(null, message: "Salgspris må ikke være negativ");
             }
             
             if (shelfLife < 1)
             {
-                throw new ArgumentOutOfRangeException(nameof(shelfLife), "Holdbarheden skal være mindst 1 dag");
+                throw new ArgumentOutOfRangeException(null, message: "Holdbarheden skal være mindst 1 dag");
             }
 
             if (string.IsNullOrWhiteSpace(barcode) || barcode.Length > 50)
             {
-                throw new ArgumentException("Stregkoden skal være udfyldt og må højest være 50 tegn",nameof(barcode));
+                throw new ArgumentException("Stregkoden skal være udfyldt og må højest være 50 tegn");
             } 
             if (_repository.ExistsByBarcode(barcode))
             {
-                throw new ArgumentException("Stregkoden er allerede i brug", nameof(barcode));
+                throw new ArgumentException("Stregkoden er allerede i brug");
             }
 
             Product product = new Product(name, barcode, purchasePrice, sellingPrice, shelfLife, isSeasonal, productCategoryId);

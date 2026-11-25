@@ -54,5 +54,34 @@ namespace SevenEleven.Core.Repositories
             connection.Open();
             command.ExecuteNonQuery();
         }
+
+        public List<ProductCategory> GetCategories()
+        {
+            List<ProductCategory> categories = new List<ProductCategory>();
+
+            string sql =
+                "SELECT ProductCategoryId, Name " +
+                "FROM dbo.ProductCategory " +
+                "ORDER BY Name;";
+            
+            using SqlConnection connection = new SqlConnection(_connectionString);
+            using SqlCommand command = new SqlCommand(sql, connection);
+
+            connection.Open();
+
+            using SqlDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                ProductCategory category = new ProductCategory
+                {
+                    ProductCategoryId = reader.GetInt32(0),
+                    Name = reader.GetString(1)
+                };
+
+                categories.Add(category);
+            }
+            return categories;
+        }
+
     }
 }

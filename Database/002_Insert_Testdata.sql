@@ -1,4 +1,19 @@
+USE SevenElevenDB;
+GO
 
+INSERT INTO dbo.ProductCategory (Name)
+SELECT v.Name
+FROM (VALUES
+    (N'Beverages'),
+    (N'Ready Meals'),
+    (N'Snacks'),
+    (N'Candy')
+) AS v(Name)
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM dbo.ProductCategory AS pc
+    WHERE pc.Name = v.Name
+);
 -- Insert products
 
 IF NOT EXISTS (SELECT 1 FROM Product WHERE Barcode = '5700000000011')

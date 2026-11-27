@@ -1,0 +1,8 @@
+USE SevenElevenDB;
+GO
+
+ALTER TABLE dbo.Product
+ALTER COLUMN Barcode NVARCHAR(50) NOT NULL;
+
+ALTER TABLE dbo.Product
+ADD CONSTRAINT UQ_Product_Barcode UNIQUE (Barcode);

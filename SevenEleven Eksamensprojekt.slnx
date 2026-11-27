@@ -1,7 +1,8 @@
 <Solution>
   <Folder Name="/Database/">
-    <File Path="Database/InsertTestData.sql" />
-    <File Path="New folder/CreateDatabase.sql" />
+    <File Path="Database/001_CreateDatabase.sql" />
+    <File Path="Database/002_Insert_Testdata.sql" />
+    <File Path="Database/003_Alter_Product_Barcode.sql" />
   </Folder>
   <Project Path="SevenEleven.Core/SevenEleven.Core.csproj" />
   <Project Path="SevenEleven.WPF/SevenEleven.WPF.csproj" />

@@ -26,6 +26,7 @@ namespace SevenEleven.WPF.ViewModels
             = "Ingen produkter fundet";
 
         public ICommand RefreshCommand { get; }
+        public ICommand OpenCreateProductCommand { get; }
         public string SearchText
         {
             get => _searchText;
@@ -42,7 +43,7 @@ namespace SevenEleven.WPF.ViewModels
             }
         }
 
-        public InventoryViewModel(InventoryRepository repository)
+        public InventoryViewModel(InventoryRepository repository, Action openCreateProduct)
         {
             _repository = repository;
 
@@ -54,6 +55,7 @@ namespace SevenEleven.WPF.ViewModels
             RefreshCommand = new RelayCommand(
                 () => LoadInventory(1)
             );
+            OpenCreateProductCommand = new RelayCommand(openCreateProduct);
         }
 
         public void LoadInventory(int storeId)

@@ -62,3 +62,36 @@ CREATE TABLE Inventory (
     CONSTRAINT CK_Inventory_MinimumStock
         CHECK (MinimumStock >= 0)
 );
+
+-- Supplier and order tables from the ordering use case / DCD
+CREATE TABLE Supplier (
+    SupplierId INT PRIMARY KEY IDENTITY(1,1),
+    Name NVARCHAR(100) NOT NULL,
+    ContactInformation NVARCHAR(255) NULL
+);
+
+CREATE TABLE [Order] (
+    OrderId INT PRIMARY KEY IDENTITY(1,1),
+    SupplierId INT NOT NULL,
+    StoreId INT NOT NULL,
+    OrderDate DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
+    ExpectedDeliveryDate DATETIME2 NULL,
+    Status NVARCHAR(20) NOT NULL DEFAULT N'Oprettet',
+    CONSTRAINT FK_Order_Supplier FOREIGN KEY (SupplierId) REFERENCES Supplier(SupplierId),
+    CONSTRAINT FK_Order_Store FOREIGN KEY (StoreId) REFERENCES Store(StoreId),
+    CONSTRAINT CK_Order_Status CHECK (Status IN (N'Oprettet', N'Bekræftet', N'Leveret', N'Annulleret'))
+);
+
+CREATE TABLE OrderLine (
+    OrderLineId INT PRIMARY KEY IDENTITY(1,1),
+    OrderId INT NOT NULL,
+    ProductId INT NOT NULL,
+    Quantity INT NOT NULL,
+    UnitPrice DECIMAL(10,2) NOT NULL,
+    CONSTRAINT FK_OrderLine_Order FOREIGN KEY (OrderId) REFERENCES [Order](OrderId),
+    CONSTRAINT FK_OrderLine_Product FOREIGN KEY (ProductId) REFERENCES Product(ProductId),
+    CONSTRAINT CK_OrderLine_Quantity CHECK (Quantity > 0)
+);
+
+IF NOT EXISTS (SELECT 1 FROM Supplier WHERE Name = N'7-Eleven Leverandør')
+    INSERT INTO Supplier (Name, ContactInformation) VALUES (N'7-Eleven Leverandør', N'Demo-leverandør');

@@ -9,8 +9,11 @@ namespace SevenEleven.Core.Models
         public int Quantity { get; set; }
         public int MinimumStock { get; set; }
         public DateTime LastUpdated { get; set; }
+        public decimal PurchasePrice { get; set; }
 
         public bool IsBelowMinimum =>
             Quantity < MinimumStock;
+
+        public string StockStatus => IsBelowMinimum ? "Under minimum" : "På niveau";
     }
 }

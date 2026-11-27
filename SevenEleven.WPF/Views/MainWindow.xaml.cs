@@ -24,7 +24,9 @@ namespace SevenEleven.WPF
             InventoryViewModel viewModel =
                 new InventoryViewModel(repository, () => OpenCreateProduct(connectionString));
 
-            DataContext = viewModel;
+            InventoryView.DataContext = viewModel;
+            OrderView.DataContext = new OrderViewModel(repository, new OrderRepository(connectionString));
+            ReceivingView.DataContext = new ReceivingViewModel(repository);
 
             viewModel.LoadInventory(1);
         }

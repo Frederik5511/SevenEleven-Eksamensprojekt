@@ -1,0 +1,36 @@
+<UserControl x:Class="SevenEleven.WPF.Views.ReceivingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Margin="22">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Margin="0,0,0,14">
+            <TextBlock Text="Registrer varemodtagelse" FontSize="25" FontWeight="Bold"/>
+            <TextBlock Text="Registrér modtagne produkter enkeltvis. Lageret bliver opdateret efter hver registrering." Margin="0,4,0,0" Foreground="#667085"/>
+        </StackPanel>
+        <DockPanel Grid.Row="1" Margin="0,0,0,6">
+            <TextBlock Text="Vælg et registreret produkt" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center"/>
+            <Button Content="Opdater liste" Command="{Binding RefreshCommand}" Padding="12,5" DockPanel.Dock="Right"/>
+        </DockPanel>
+        <DataGrid Grid.Row="2" ItemsSource="{Binding Products}" SelectedItem="{Binding SelectedProduct}"
+                  AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" SelectionMode="Single" HeadersVisibility="Column">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Produkt" Binding="{Binding ProductName}" Width="2*"/>
+                <DataGridTextColumn Header="Stregkode" Binding="{Binding Barcode}" Width="1.4*"/>
+                <DataGridTextColumn Header="På lager" Binding="{Binding Quantity}" Width="*"/>
+                <DataGridTextColumn Header="Minimum" Binding="{Binding MinimumStock}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel Grid.Row="3" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,14,0,8">
+            <TextBlock Text="Modtaget antal" VerticalAlignment="Center" Margin="0,0,8,0"/>
+            <TextBox Text="{Binding QuantityText, UpdateSourceTrigger=PropertyChanged}" Width="85" Height="32" VerticalContentAlignment="Center"/>
+            <Button Content="Registrer modtagelse" Command="{Binding RegisterReceiptCommand}" Margin="10,0,0,0" Padding="16,6" Background="#D71920" Foreground="White"/>
+        </StackPanel>
+        <TextBlock Grid.Row="4" Text="{Binding Message}" TextWrapping="Wrap" VerticalAlignment="Center" Foreground="#455468" Margin="0,4,0,0"/>
+    </Grid>
+</UserControl>

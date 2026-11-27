@@ -1,7 +1,8 @@
-﻿
-using System.Windows;
+﻿using System.Windows;
 using SevenEleven.Core.Repositories;
 using SevenEleven.WPF.ViewModels;
+using SevenEleven.WPF.Views;
+using SevenEleven.Core.Services;
 
 namespace SevenEleven.WPF
 {
@@ -21,13 +22,25 @@ namespace SevenEleven.WPF
                 new InventoryRepository(connectionString);
 
             InventoryViewModel viewModel =
-                new InventoryViewModel(repository);
+                new InventoryViewModel(repository, () => OpenCreateProduct(connectionString));
 
             InventoryView.DataContext = viewModel;
             OrderView.DataContext = new OrderViewModel(repository, new OrderRepository(connectionString));
             ReceivingView.DataContext = new ReceivingViewModel(repository);
 
             viewModel.LoadInventory(1);
+        }
+        private void OpenCreateProduct(string connectionString)
+        {
+            ProductRepository productRepository = new ProductRepository(connectionString);
+            ProductService productService = new ProductService(productRepository);
+            CreateProductViewModel formViewModel = new CreateProductViewModel(productService);
+            formViewModel.Categories.AddRange(productRepository.GetCategories());
+
+            CreateProductView window = new CreateProductView();
+            window.Owner = this;
+            window.DataContext = formViewModel;
+            window.ShowDialog();
         }
     }
 }
